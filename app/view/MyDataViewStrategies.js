@@ -6,7 +6,6 @@ Ext.define('StratGo.view.MyDataViewStrategies', {
     config: {
         scrollable: true,
         useComponents: true,
-        html:'Strategies',
         defaultType: 'mydataitemstrategies'
     },
 

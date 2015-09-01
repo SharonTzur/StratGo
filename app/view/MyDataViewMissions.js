@@ -6,12 +6,18 @@ Ext.define('StratGo.view.MyDataViewMissions', {
     config: {
         scrollable   : true,
         useComponents: true,
-        html:'Tasks',
         defaultType  : 'mydataitemmissions',
+    },
+
+
+    constructor: function () {
+        this.callParent(arguments);
+        this.setStore(Ext.getStore('taskStore'));
     },
 
 
     initialize: function () {
         this.callParent(arguments);
+
     }
 });

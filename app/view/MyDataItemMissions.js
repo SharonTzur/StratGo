@@ -3,67 +3,75 @@ Ext.define('StratGo.view.MyDataItemMissions', {
     xtype   : 'mydataitemmissions',
     myFields: {},
     config  : {
-        layout  : 'vbox',
-        padding : 10,
-        defaults: {
-            margin: 5
-        },
-        items   : [
-            {
-                xtype: 'container',
-                name : 'missionTitle'
-            },
-            {
-                xtype: 'container',
-                name : 'missionDesc'
-            },
-            {
-                xtype: 'button',
-                name : 'isDoneButton',
-                text : 'isDone?'
-            },
-            {
-                xtype : 'container',
-                layout: 'hbox',
-                items : [
-                    {
-                        xtype: 'button',
-                        text : 'How',
-                        name : 'howButton',
-                        type : 'moreButtons'
 
+        items: [
+            {
+                layout  : 'vbox',
+                xtype   : 'container',
+                name : 'bigContainer',
+                defaults: {
+                    padding: 15
+                },
+                items   : [
+
+                    {
+                        xtype: 'container',
+                        name : 'missionTitle'
+                    },
+                    {
+                        xtype: 'container',
+                        name : 'missionDesc'
                     },
                     {
                         xtype: 'button',
-                        text : 'Why',
-                        name : 'whyButton',
-                        type : 'moreButtons'
+                        name : 'isDoneButton',
+                        text : 'isDone?'
                     },
                     {
-                        xtype: 'button',
-                        text : 'Example',
-                        name : 'exampleButton',
-                        type : 'moreButtons'
-                    },
-                    {
-                        xtype: 'button',
-                        text : 'Tip',
-                        name : 'tipButton',
-                        type : 'moreButtons'
+                        xtype : 'container',
+                        layout: 'hbox',
+                        items : [
+                            {
+                                xtype: 'button',
+                                text : 'How',
+                                name : 'howButton',
+                                type : 'moreButtons'
+
+                            },
+                            {
+                                xtype: 'button',
+                                text : 'Why',
+                                name : 'whyButton',
+                                type : 'moreButtons'
+                            },
+                            {
+                                xtype: 'button',
+                                text : 'Example',
+                                name : 'exampleButton',
+                                type : 'moreButtons'
+                            },
+                            {
+                                xtype: 'button',
+                                text : 'Tip',
+                                name : 'tipButton',
+                                type : 'moreButtons'
+                            }
+
+                        ]
                     }
-
                 ]
-            },
+            }
+
         ]
 
     },
 
     updateRecord: function (newRecord) {
         this.callParent(arguments);
-        if (!newRecord) {
-            return;
+        if(newRecord.data.isDone==true) {
+            var bigContainer = this.down('container[name="bigContainer"]');
+            bigContainer.setStyle('opacity: 0.3;padding:0;');
         }
-        this.__record = newRecord;
         var missionTitle = this.down('container[name="missionTitle"]');
         missionTitle.setHtml(newRecord.get('title')).setStyle('font-size:35px');
 
@@ -72,7 +80,6 @@ Ext.define('StratGo.view.MyDataItemMissions', {
 
 
         var isDoneButton = this.down('button[name="isDoneButton"]');
-
         if (newRecord.data.isDone == true) {
             isDoneButton.setUi('confirm');
         }
@@ -108,37 +115,44 @@ Ext.define('StratGo.view.MyDataItemMissions', {
 
     onIsDoneButtonTapped: function (scope, event, optObj) {
         var record = optObj['record'];
-        record.data.isDone = true;
-// UPDATING DATABASE ITSELF - NEED TO ADD USERS!!
-        var query = new Parse.Query("Task");
-        query.get(record.internalId, {
-            success: function(task) {
-                task.set("isDone", true);
-                task.save(null, {
-                    success: function(task) {
-                        alert('isDone Updated!');
-                    },
-                    error: function(task, error) {
-                        // Execute any logic that should take place if the save fails.
-                        // error is a Parse.Error with an error code and message.
-                        alert('Failed to create new object, with error code: ' + error.message);
+        var currentUser = Parse.User.current();
+        var currentUserStrategies = currentUser.attributes.UserStrategies;
+        for (var i = 0; i < currentUserStrategies.length; i++) {
+            var strat = currentUserStrategies[i];
+            var tasks = strat.tasks;
+            for (var j = 0; j < tasks.length; j++) {
+                var task = tasks[j];
+                if (record.data.title == task.title) {
+                    if (record.data.isDone == false) {
+                        task.isDone = true;
+                        record.data.isDone = true;
+                        currentUser.save();
                     }
-                });
-            },
+                    else {
+                        task.isDone = false;
+                        record.data.isDone = false;
+                        currentUser.save();
 
-            error: function(object, error) {
-                // error is an instance of Parse.Error.
+                    }
+                }
             }
-        });
 
+        }
+        if (task.isDone == true || record.data.isDone == true) {
+            arguments[0].setUi('confirm');
+        }
+        else {
+            arguments[0].setUi('decline');
+
+        }
     },
 
-    onHowButtonTapped: function (scope, event, optObj) {
+    onHowButtonTapped    : function (scope, event, optObj) {
         record = optObj['record'];
         Ext.Msg.alert('How To: ' + record.data.title, record.data.How, Ext.emptyFn);
 
     },
-    onWhyButtonTapped: function (scope, event, optObj) {
+    onWhyButtonTapped    : function (scope, event, optObj) {
         record = optObj['record'];
         Ext.Msg.alert('Why To: ' + record.data.title, record.data.Why, Ext.emptyFn);
 
@@ -148,7 +162,7 @@ Ext.define('StratGo.view.MyDataItemMissions', {
         Ext.Msg.alert('Example To: ' + record.data.title, record.data.Example, Ext.emptyFn);
 
     },
-    onTipButtonTapped: function (scope, event, optObj) {
+    onTipButtonTapped    : function (scope, event, optObj) {
         record = optObj['record'];
         Ext.Msg.alert('Tip To: ' + record.data.title, record.data.Tip, Ext.emptyFn);
 

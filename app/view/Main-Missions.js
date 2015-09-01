@@ -48,15 +48,11 @@ Ext.define('StratGo.view.Main-Missions', {
                 autoLoad: true,
                 storeId: 'taskStore'
             });
+        /*    taskStore.data.internalId = this.internalId;
             var dvm = this.items.getAt(0);
             dvm.taskData = taskData;
-            taskStore.load({
-                    callback: function () {
-                        dvm.setStore(taskStore);
-                    }
-                }
-            )
-
+            dvm.setStore(taskStore);
+*/
 
         }
     }

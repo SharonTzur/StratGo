@@ -3,7 +3,7 @@ Ext.define('StratGo.view.MyDataItemStrategies', {
     xtype   : 'mydataitemstrategies',
     myFields: {},
     config  : {
-        tasks : null,
+        tasks   : null,
         layout  : 'vbox',
         padding : 10,
         defaults: {
@@ -31,35 +31,51 @@ Ext.define('StratGo.view.MyDataItemStrategies', {
         strategyButton.on('tap', this.onStrategyButtonTapped, this, {record: newRecord});
         var strategyDesc = this.down('container[name="strategyDesc"]');
         strategyDesc.setHtml(newRecord.get('desc'));
-        debugger;
     },
 
 
-    onStrategyButtonTapped: function(scope, event, optObj) {
+    onStrategyButtonTapped: function (scope, event, optObj) {
         var record = optObj['record'];
-        var strategyTitle = record.data.title;
-        var  strategy = new Parse.Query("Strategy");
-        strategy.equalTo("title", strategyTitle );
-        strategy.find({
-            success: function (strategy) {
-                var query = new Parse.Query("Task");
-                var strat = strategy[0];
-                query.equalTo("isFrom", strat);
-                query.find({
-                    success: function (tasks) {
-                        console.log('tasks');
-                        console.log(tasks);
-                        var mainMissions = Ext.create('StratGo.view.Main-Missions', {
-                            tasks: tasks
-                        });
-                        Ext.Viewport.setActiveItem(mainMissions);
+        var currentUser = Parse.User.current();
+        var currentUserStrategies = currentUser.attributes.UserStrategies;
+        debugger;
+        /// check if user already have this strategy
+        var existing = false;
+        if (currentUserStrategies && currentUserStrategies.length > 0) {
+            for (var i = 0; i < currentUserStrategies.length; i++) {
+                var strat = currentUserStrategies[i];
+                if (strat) {
+                    if (strat.title == record.data.title) {
+                        existing = true;
+                        Ext.Viewport.setActiveItem(Ext.create('StratGo.view.Main-Missions', {
+                            tasks     : strat.tasks
+                        }));
                     }
-                });
+                }
             }
-        });
+        }
+        ///if not, save new strategy to user
+        if (existing == false) {
+            var newStrat = {
+                title: record.data.title,
+                desc : record.data.desc,
+                tasks: record.raw.tasks
+            };
+
+            currentUser.add("UserStrategies", newStrat);
+            currentUser.save();
+
+
+            Ext.Viewport.setActiveItem(Ext.create('StratGo.view.Main-Missions', {
+                tasks     : newStrat.tasks
+            }));
+        }
+
+
+
     },
 
-    constructor           : function () {
+    constructor: function () {
         this.callParent(arguments);
 
 

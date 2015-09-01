@@ -2221,12 +2221,15 @@ Ext.ClassManager.addNameAlternateMappings({
   "StratGo.model.Strategy": [],
   "StratGo.model.Task": [],
   "StratGo.store.Strategies": [],
+  "StratGo.view.Login": [],
   "StratGo.view.Main": [],
   "StratGo.view.Main-Missions": [],
   "StratGo.view.MyDataItemMissions": [],
   "StratGo.view.MyDataItemStrategies": [],
   "StratGo.view.MyDataViewMissions": [],
-  "StratGo.view.MyDataViewStrategies": []
+  "StratGo.view.MyDataViewStrategies": [],
+  "StratGo.view.SignUp": [],
+  "StratGo.view.Starter": []
 });
 
 Ext.ClassManager.addNameAliasMappings({
@@ -2962,6 +2965,9 @@ Ext.ClassManager.addNameAliasMappings({
   "StratGo.model.Strategy": [],
   "StratGo.model.Task": [],
   "StratGo.store.Strategies": [],
+  "StratGo.view.Login": [
+    "widget.login-form"
+  ],
   "StratGo.view.Main": [],
   "StratGo.view.Main-Missions": [
     "widget.mainmissions"
@@ -2977,7 +2983,11 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "StratGo.view.MyDataViewStrategies": [
     "widget.mydataviewstrategies"
-  ]
+  ],
+  "StratGo.view.SignUp": [
+    "widget.sign-up-form"
+  ],
+  "StratGo.view.Starter": []
 });
 
 

@@ -1,10 +1,5 @@
 Ext.define('StratGo.view.Starter', {
         extend  : 'Ext.Container',
-        requires: [
-            'Ext.dataview.DataView',
-            'StratGo.view.MyDataViewStrategies',
-            'StratGo.view.MyDataItemStrategies'
-        ],
         config: {
             layout: {
                 type:'vbox',
@@ -24,7 +19,6 @@ Ext.define('StratGo.view.Starter', {
                     name:'signUp',
                     text:'Still not Signed Up? Click Here :)',
                     handler: function() {
-
                         var signUp = Ext.create('StratGo.view.SignUp');
                         cont = this.up().getAt(0);
                         cont.setItems(signUp);

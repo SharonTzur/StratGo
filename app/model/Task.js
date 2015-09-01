@@ -11,7 +11,6 @@ Ext.define('StratGo.model.Task', {
             {name: 'title', type: 'string'},
             {name: 'desc', type: 'string'},
             {name: 'isDone', type: 'boolean'},
-            {name: 'isFrom', type: 'auto'},
             {name: 'How', type: 'auto'},
             {name: 'Why', type: 'auto'},
             {name: 'Example', type: 'auto'},

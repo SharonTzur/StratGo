@@ -1,3 +1,5 @@
+
+
 Ext.define('StratGo.view.Login', {
         extend  : 'Ext.Container',
         xtype   : 'login-form',
@@ -28,7 +30,7 @@ Ext.define('StratGo.view.Login', {
                             xtype: 'passwordfield',
                             name : 'password',
                             label: 'Password'
-                        },
+                        }
 
 
                     ]
@@ -51,16 +53,18 @@ Ext.define('StratGo.view.Login', {
             Parse.User.logIn(username, password, {
                 success: function (user) {
                     Ext.Msg.alert('login successful');
+                    var token = user._sessionToken;
+                    Ext.ux.parse.data.ParseConnector.setSessionToken(token);
                     Ext.Viewport.setActiveItem(Ext.create('StratGo.view.Main',{
-                        sessionToken: user._sessionToken,
-
-
+                        sessionToken: token
                     }));
 
 
                 },
                 error  : function (user, error) {
                     // The login failed. Check error to see why.
+                    handleParseError(error);
+
                 }
             });
         },

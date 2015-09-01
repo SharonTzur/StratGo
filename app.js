@@ -9,6 +9,12 @@
  changes and its generated code, it will produce a "merge conflict" that you
  will need to resolve manually.
  */
+function handleParseError(err) {
+    switch (err.code) {
+        case Parse.Error.INVALID_SESSION_TOKEN:
+            Parse.User.logOut();
+    }
+}
 
 Ext.application({
     name: 'StratGo',
@@ -25,29 +31,26 @@ Ext.application({
         'Ext.MessageBox',
     ],
     models  : [
-        /*   'TestStrat.model.Example',
-         'StratGo.model.How',*/
+
         'StratGo.model.Task',
         'StratGo.model.Strategy'
-        /* 'StratGo.model.Tip',
-         'StratGo.model.Why'*/
+
 
     ],
 
     stores: [
-        /*    'StratGo.store.Examples',
-         'StratGo.store.Hows',*/
-        //'StratGo.store.Tasks',
+
         'StratGo.store.Strategies'
-        /*  'StratGo.store.Tips',
-         'StratGo.store.Whys',*/
+
 
     ],
     views : [
         'StratGo.view.SignUp',
         'StratGo.view.Login',
-        'Main',
-        'Main-Missions'
+        'StratGo.view.Main',
+        'StratGo.view.Main-Missions',
+        'StratGo.view.Starter'
+
     ],
 
     icon: {
@@ -75,47 +78,8 @@ Ext.application({
 
         Ext.fly('appLoadingIndicator').destroy();
 
-      /*  var store = Ext.create("StratGo.store.Strategies");
 
-       store.load({
-            callback: function (data) {
-                Ext.Viewport.add(Ext.create('StratGo.view.Main',{
-                    store:store
-                }));
-            }
-        });*/
-        //Ext.Viewport.add(Ext.create('StratGo.view.Starter'));
-        Ext.Viewport.add(Ext.create('StratGo.view.Main'));
-
-                // Initialize the main view
-
-
- /*       var Strategy = Parse.Object.extend("Strategy");
-        var strategy = new Strategy();
-
-        strategy.save({
-        title: "Try Strategy", desc: "Learn how to use strategies",
-            tasks: [
-            {title:"task1", desc:"desc of task1", isDone:false,
-                How: "Open task 1", Why: "for trying", Tip: "tap on it", Example: "tapping on screen"},
-            {title:"task2", desc:"desc of task2", isDone:false,
-                How: "Open task 2", Why: "for trying2", Tip: "tap on it2", Example: "tapping on screen2"},
-            {title:"task3", desc:"desc of task3", isDone:false,
-                How: "Open task 3", Why: "for trying3", Tip: "tap on it3", Example: "tapping on screen3"} ]
-
-        }, {
-
-            success: function(strategy) {
-            debugger;
-            },
-            error: function(strategy, error) {
-                debugger;
-
-                // The save failed.
-                // error is a Parse.Error with an error code and message.
-            }
-        });*/
-
+        Ext.Viewport.add(Ext.create('StratGo.view.Starter'));
 
     },
 

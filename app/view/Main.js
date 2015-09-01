@@ -20,11 +20,14 @@ Ext.define('StratGo.view.Main', {
             ]
         },
 
-
+        constructor: function() {
+            this.callParent(arguments);
+        },
 
         initialize: function() {
+            this.callParent(arguments);
            var dv = this.items.getAt(0).getId();
-            dv.setStore=this.store;
-        }
-    }
+            dv.sessionToken=this.sessionToken;
+        },
+}
 )

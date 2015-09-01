@@ -71,6 +71,23 @@ Ext.define('StratGo.view.SignUp', {
                     // Hooray! Let them use the app now.
                     console.log('sign up successful');
                     console.log(user);
+                    Parse.User.logIn(username, password, {
+                        success: function (user) {
+                            Ext.Msg.alert('login successful');
+                            var token = user._sessionToken;
+                            Ext.ux.parse.data.ParseConnector.setSessionToken(token);
+                            Ext.Viewport.setActiveItem(Ext.create('StratGo.view.Main',{
+                                sessionToken: token
+                            }));
+
+
+                        },
+                        error  : function (user, error) {
+                            // The login failed. Check error to see why.
+                            handleParseError(error);
+
+                        }
+                    });
                 },
                 error  : function (user, error) {
                     // Show the error message somewhere and let the user try again.

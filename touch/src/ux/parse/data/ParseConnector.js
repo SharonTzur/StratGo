@@ -37,6 +37,10 @@ Ext.define("Ext.ux.parse.data.ParseConnector", {
      */
     _sessionToken: null,
 
+    setSessionToken : function (token)
+    {
+        this._sessionToken = token
+    },
     /**
      * The Parse user objectId for the authenticated user
      * @private
